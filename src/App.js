@@ -1,23 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
 
 function App() {
+  const [query, setQuery] = useState("");
+  const [images, setImages] = useState([]);
+
+  const search = async () => {
+    const results = await getImages(query);
+    setImages(results);
+  };
+
+  function updateQuery(event) {
+    setQuery(event.target.value);
+  }
+
+  async function getImages() {
+    const url = "https://serverless-api.immanent.workers.dev";
+    const resp = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({ query }),
+      headers: { "cont-type": "application/json" },
+    });
+
+    return resp.json();
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
+      <div className="form">
+        <input
+          type="text"
+          id="query"
+          onChange={updateQuery}
+          placeholder="Search for images 📷"
+        />
+        <button onClick={search}>Search</button>
+      </div>
+      {images.map((image) => (
+        <a key={image.id} href={image.link} target="_blank" rel="noreferrer">
+          <img src={image.image} />
         </a>
-      </header>
+      ))}
     </div>
   );
 }
