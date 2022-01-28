@@ -4,9 +4,16 @@ import { useState } from "react";
 function App() {
   const [query, setQuery] = useState("");
   const [images, setImages] = useState([]);
+  const devUrl = "https://serverless-api.immanent.workers.dev";
+  const prodUrl = "https://serverless-api-worker.immanent.dev";
 
-  const search = async () => {
-    const results = await getImages(query);
+  const searchDev = async () => {
+    const results = await getImages(devUrl);
+    setImages(results);
+  };
+
+  const searchProd = async () => {
+    const results = await getImages(prodUrl);
     setImages(results);
   };
 
@@ -14,8 +21,7 @@ function App() {
     setQuery(event.target.value);
   }
 
-  async function getImages() {
-    const url = "https://serverless-api.immanent.workers.dev";
+  async function getImages(url) {
     const resp = await fetch(url, {
       method: "POST",
       body: JSON.stringify({ query }),
@@ -33,7 +39,8 @@ function App() {
           onChange={updateQuery}
           placeholder="Search for images 📷"
         />
-        <button onClick={search}>Search</button>
+        <button onClick={searchDev}>Search Dev</button>
+        <button onClick={searchDev}>Search Prod</button>
       </div>
       {images.map((image) => (
         <a key={image.id} href={image.link} target="_blank" rel="noreferrer">
