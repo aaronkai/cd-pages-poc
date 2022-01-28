@@ -15,7 +15,7 @@ function App() {
   }
 
   async function getImages() {
-    const url = "https://serverless-api-worker.immanent.dev";
+    const url = "https://serverless-api.immanent.workers.dev";
     const resp = await fetch(url, {
       method: "POST",
       body: JSON.stringify({ query }),
