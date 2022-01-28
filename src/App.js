@@ -37,7 +37,7 @@ function App() {
       </div>
       {images.map((image) => (
         <a key={image.id} href={image.link} target="_blank" rel="noreferrer">
-          <img src={image.image} />
+          <img src={image.image} alt={query} />
         </a>
       ))}
     </div>
